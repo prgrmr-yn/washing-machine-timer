@@ -15,4 +15,4 @@ jobs:
         run: |
           curl -X POST https://discord.com/api/webhooks/1332106949118001323/teyZg3VW2N4sQG7i0vHDwzTBoaQesXYjsEwBc7oldAxWMBdtB1AZP8I_j30HzHxPOkVa \
             -H "Content-Type: application/json" \
-            -d '{"message":"🧺 Washing machine finished"}'
+            -d '{"content":"🧺 Washing machine finished"}'
