@@ -1,0 +1,18 @@
+name: Washing Machine Timer (1 Hour)
+
+on:
+  repository_dispatch:
+    types: [washing_started]
+
+jobs:
+  wait-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait 1 hour
+        run: sleep 3600
+
+      - name: Send webhook
+        run: |
+          curl -X POST x https://discord.com/api/webhooks/1332106949118001323/teyZg3VW2N4sQG7i0vHDwzTBoaQesXYjsEwBc7oldAxWMBdtB1AZP8I_j30HzHxPOkVa \
+            -H "Content-Type: application/json" \
+            -d '{"message":"🧺 Washing machine finished"}'
