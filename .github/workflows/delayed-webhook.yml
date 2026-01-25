@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wait 60 minutes  # change to 60 for real test
-        run: sleep 30 #3600
+        run: sleep 3600 #3600
       - name: Send washing webhook
         run: |
           curl -X POST https://discord.com/api/webhooks/1464767349394768178/LSpUIkWc6aLvRjQLQtp9T74zGJJ28NrrzGQDU13LNSkJir-FC3zMLPUicMQ7a6FSu4hJ \
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wait 90 minutes
-        run: sleep 30 #5400  # 90 min = 5400 seconds
+        run: sleep 5400  # 90 min = 5400 seconds
       - name: Send dryer webhook
         run: |
           curl -X POST https://discord.com/api/webhooks/1464767502906167397/ftBAJ1D3DsI6s31l5gwJst0p3y0CeH2O1n3EauLjaHHsGl8u3JbTUc_mspwjZJyvTG5-   \
