@@ -1,8 +1,10 @@
+
 name: Laundry Timer
 
 on:
   repository_dispatch:
-    types: [washing_started, dryer_started]
+    # Added the two specific dryer types here
+    types: [washing_started, dryer_first_started, dryer_last_started]
 
 jobs:
   washing_machine:
@@ -13,7 +15,7 @@ jobs:
         run: |
           curl -X POST https://discord.com/api/webhooks/1493073899594711092/LHGSBAGL6dFuIeN_LeJrFl-nWzT1qROur6cS654S3IGtKDGqEPUiEymjmMdWh_GG0LSY \
             -H "Content-Type: application/json" \
-            -d '{"content":"⏳ Washing timer started! I will remind you in 60 minutes."}'
+            -d '{"content":"⏳ Washing timer started! 60 mins remaining."}'
       - name: Wait 60 minutes
         run: sleep 3600
       - name: Send washing webhook
@@ -22,19 +24,36 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"content":"🧺 Washing machine finished!"}'
 
-  dryer:
-    if: github.event.action == 'dryer_started'
+  dryer_first_cycle:
+    if: github.event.action == 'dryer_first_started'
     runs-on: ubuntu-latest
     steps:
-      - name: Confirm dryer started
+      - name: Confirm first dryer cycle
         run: |
-          curl -X POST ${{ secrets.WEBHOOK_URL }} \
+          curl -X POST https://discord.com/api/webhooks/1493074210573123634/8EGfia9ZNdZqBP295g8WTCTyA3FqENADaG_WL3MIX4QEk2Sll7lMucDilec-dzbtSXY6 \
             -H "Content-Type: application/json" \
-            -d '{"content":"⏳ Dryer timer started! I will remind you in 90 minutes."}'
+            -d '{"content":"⏳ **Dryer: FIRST cycle started.** (90 mins)"}'
       - name: Wait 90 minutes
         run: sleep 5400
-      - name: Send dryer webhook
+      - name: Send completion webhook
         run: |
-          curl -X POST ${{ secrets.WEBHOOK_URL }} \
+          curl -X POST https://discord.com/api/webhooks/1493074210573123634/8EGfia9ZNdZqBP295g8WTCTyA3FqENADaG_WL3MIX4QEk2Sll7lMucDilec-dzbtSXY6 \
             -H "Content-Type: application/json" \
-            -d '{"content":"🧺 Dryer finished!"}'
+            -d '{"content":"⚠️ First dryer cycle done! Needs a second flip/restart?"}'
+
+  dryer_last_cycle:
+    if: github.event.action == 'dryer_last_started'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm last dryer cycle
+        run: |
+          curl -X POST https://discord.com/api/webhooks/1493074210573123634/8EGfia9ZNdZqBP295g8WTCTyA3FqENADaG_WL3MIX4QEk2Sll7lMucDilec-dzbtSXY6 \
+            -H "Content-Type: application/json" \
+            -d '{"content":"⏳ **Dryer: FINAL cycle started.** (90 mins)"}'
+      - name: Wait 90 minutes
+        run: sleep 5400
+      - name: Send completion webhook
+        run: |
+          curl -X POST https://discord.com/api/webhooks/1493074210573123634/8EGfia9ZNdZqBP295g8WTCTyA3FqENADaG_WL3MIX4QEk2Sll7lMucDilec-dzbtSXY6 \
+            -H "Content-Type: application/json" \
+            -d '{"content":"✅ Dryer finished! Everything should be dry now."}'
