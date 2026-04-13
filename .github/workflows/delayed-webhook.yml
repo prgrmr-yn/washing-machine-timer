@@ -11,9 +11,13 @@ jobs:
     steps:
       - name: Confirm washing started
         run: |
+          # Calculate time 60 minutes from now in your local timezone
+          REMIND_TIME=$(TZ='Australia/Sydney' date -d '+60 minutes' '+%-I:%M %p')
+
           curl -X POST "https://discord.com/api/webhooks/1493073899594711092/LHGSBAGL6dFuIeN_LeJrFl-nWzT1qROur6cS654S3IGtKDGqEPUiEymjmMdWh_GG0LSY" \
             -H "Content-Type: application/json" \
-            -d '{"content":"⏳ Washing timer started! 60 mins remaining."}'
+            -d "{\"content\":\"⏳ **Washing started!** I will remind you at **$REMIND_TIME**.\"}"
+
       - name: Wait 60 minutes
         run: sleep 3600
       - name: Send washing webhook
@@ -28,16 +32,20 @@ jobs:
     steps:
       - name: Confirm first dryer cycle
         run: |
+          # Calculate time 90 minutes from now
+          REMIND_TIME=$(TZ='Australia/Sydney' date -d '+90 minutes' '+%-I:%M %p')
+
           curl -X POST "https://discord.com/api/webhooks/1493074210573123634/8EGfia9ZNdZqBP295g8WTCTyA3FqENADaG_WL3MIX4QEk2Sll7lMucDilec-dzbtSXY6" \
             -H "Content-Type: application/json" \
-            -d '{"content":"⏳ **Dryer: FIRST cycle started.** (90 mins)"}'
+            -d "{\"content\":\"⏳ **Dryer: FIRST cycle started.** I'll ping you at **$REMIND_TIME**.\"}"
+
       - name: Wait 90 minutes
         run: sleep 5400
       - name: Send completion webhook
         run: |
           curl -X POST "https://discord.com/api/webhooks/1493074210573123634/8EGfia9ZNdZqBP295g8WTCTyA3FqENADaG_WL3MIX4QEk2Sll7lMucDilec-dzbtSXY6" \
             -H "Content-Type: application/json" \
-            -d '{"content":"⚠️ First dryer cycle done! Needs a second flip/restart?"}'
+            -d '{"content":"⚠️ First dryer cycle done! Needs a second flip?"}'
 
   dryer_last_cycle:
     if: github.event.action == 'dryer_last_started'
@@ -45,9 +53,13 @@ jobs:
     steps:
       - name: Confirm last dryer cycle
         run: |
+          # Calculate time 90 minutes from now
+          REMIND_TIME=$(TZ='Australia/Sydney' date -d '+90 minutes' '+%-I:%M %p')
+
           curl -X POST "https://discord.com/api/webhooks/1493074210573123634/8EGfia9ZNdZqBP295g8WTCTyA3FqENADaG_WL3MIX4QEk2Sll7lMucDilec-dzbtSXY6" \
             -H "Content-Type: application/json" \
-            -d '{"content":"⏳ **Dryer: FINAL cycle started.** (90 mins)"}'
+            -d "{\"content\":\"⏳ **Dryer: FINAL cycle started.** See you at **$REMIND_TIME**.\"}"
+
       - name: Wait 90 minutes
         run: sleep 5400
       - name: Send completion webhook
